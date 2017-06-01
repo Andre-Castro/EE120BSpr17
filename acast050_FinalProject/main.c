@@ -6,6 +6,10 @@
  */ 
 
 #include <avr/io.h>
+#include "io.c"
+
+const unsigned char ARR_SIZE = 5;
+char* strings[ARR_SIZE] = {"Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5"}
 
 void ADC_init() {
 	ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
@@ -14,6 +18,11 @@ void ADC_init() {
 	// ADATE: setting this bit enables auto-triggering. Since we are
 	//        in Free Running Mode, a new conversion will trigger whenever
 	//        the previous conversion completes.
+}
+
+enum JS_STATES {init, up, down};
+void joyStick_Tick(){
+	
 }
 
 int main(void)
