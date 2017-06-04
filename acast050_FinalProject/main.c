@@ -9,6 +9,7 @@
 #include "bit.h"
 
 unsigned char pulses[100][2];
+const unsigned short MAX_VAL = 65000;
 
 const unsigned char ARR_SIZE = 5;
 const char *strings[5] = {"Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5"};
@@ -56,6 +57,19 @@ void ADC_init() {
 	//        in Free Running Mode, a new conversion will trigger whenever
 	//        the previous conversion completes.
 }
+
+typedef struct _task {
+	/*Tasks should have members that include: state, period,
+		a measurement of elapsed time, and a function pointer.*/
+	signed char state; //Task's current state
+	unsigned long int period; //Task period
+	unsigned long int elapsedTime; //Time elapsed since last task tick
+	int (*TickFct)(int); //Task tick function
+} task;
+
+task keypad;
+task tasks[1];
+const unsigned char taskNum = 1;
 
 enum JS_STATES {init, up, down, maintainD, maintainU} JS_STATE;
 void joyStick_Tick(){
@@ -109,18 +123,27 @@ void joyStick_Tick(){
 }
 
 void irLoop(){
-	unsigned char highPulse = 0;
-	unsigned char lowPulse = 0;
+	unsigned short highPulse = 0;
+	unsigned short lowPulse = 0;
 	static unsigned char currentPulse = 0;
-
-	while(PINA & 0x01){
-		highPulse++;
+	if(PINA & 0x01){
+		while(PINA & 0x01){
+			highPulse++;
+			if(highPulse >= MAX_VAL){
+				return currentPulse;
+			}
+		}
+		pulses[currentPulse][0] = highPulse;
+		while(!(PINA & 0x01)){
+			lowPulse++;
+			if(lowPulse >= MAX_VAL){
+				return currentPulse;
+			}
+		}
+		pulses[currentPulse][1] = lowPulse;
+		currentPulse++;
+		//LCD_DisplayString(1, pulses[currentPulse]);
 	}
-	pulses[currentPulse][0] = highPulse;
-	while(!(PINA & 0x01)){
-		lowPulse++;
-	}
-	pulses[currentPulse][1] = lowPulse;
 }
 
 int main(void){
@@ -133,7 +156,7 @@ int main(void){
 	LCD_ClearScreen();
 	LCD_Cursor(1);
 		
-	unsigned long GCD = 1;
+	unsigned long GCD = 200;
 	TimerSet(GCD);
 	TimerOn();
 
@@ -145,20 +168,21 @@ int main(void){
 
 	while (1){
 		joyStick_Tick();
-		while(count2 < 50){
+		//while(count2 < 50){
 			while (!TimerFlag);
 			TimerFlag = 0;
 			count2 ++;
 
 			irLoop();
+			LCD_DisplayString(1, count2);
 
 			x = ADC;
 			PORTB = x & 0xFF;
 			nineAndTen = (char)(x>>8);
 			PORTC = SetBit(PORTC, 2, (nineAndTen & 0x01));
 			PORTC = SetBit(PORTC, 3, (nineAndTen & 0x02));
-		}
-		count2 = 0;
+		//}
+		//count2 = 0;
 	}
 	return 0;
 }
