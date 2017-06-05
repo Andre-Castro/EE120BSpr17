@@ -186,10 +186,10 @@ void decodeTick(){
 		LCD_DisplayString(1, "Power!");
 	}
 	else if(averageHigh > 77 && averageHigh < 84){
-		LCD_DisplayString(1, "Channel");
+		LCD_DisplayString(1, "Pointed Towards \"Channel UP\"");
 	}
-	else if(averageHigh > 91){
-		LCD_DisplayString(1, "Pointed Away");
+	else if(averageHigh > 91 && averageHigh < 130){
+		LCD_DisplayString(1, "Pointed Away    \"Channel DOWN\"");
 	}
 
 	/*unsigned long averageLow = 0;
@@ -222,29 +222,6 @@ int main(void){
 	unsigned char count2 = 0;
 	unsigned char nineAndTen = 0;
 	unsigned short high = 0;
-
-	/*unsigned char i = 0;
-	tasks[i].state = IR_init;
-	tasks[i].period = 1;
-	tasks[i].elapsedTime = tasks[i].period;
-	tasks[i].TickFct = &irLoop;
-	
-	i++;
-	tasks[i].state = JS_init;
-	tasks[i].period = 50;
-	tasks[i].elapsedTime = tasks[i].period;
-	tasks[i].TickFct = &joyStick_Tick;
-
-	while(1) {
-		for(i = 0; i < taskNum; i++){
-			if(tasks[i].elapsedTime >= tasks[i].period){
-				tasks[i].state = tasks[i].TickFct(tasks[i].state);
-				tasks[i].elapsedTime = 0;
-			}
-			tasks[i].elapsedTime += GCD;
-		}
-	}*/
-
 
 	while (1){
 		//joyStick_Tick();
