@@ -10,6 +10,7 @@
 
 unsigned char pulses[100][2];
 const unsigned short MAX_VAL = 65000;
+unsigned char currentPulse = 0;
 
 const unsigned char ARR_SIZE = 5;
 const char *strings[5] = {"Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5"};
@@ -126,31 +127,31 @@ enum IR_STATES{IR_init, countHigh, countLow, update};
 void irLoop(unsigned short x, unsigned short y){
 	unsigned short highPulse = 0;
 	unsigned short lowPulse = 0;
-	static unsigned char currentPulse = 0;
-	unsigned char i = 0;
-	for(i = 0; i < 100; i ++){
-		if(x != ADC){ //if a change from the orriginal ADC signal is detected
-			y = ADC; //set y to the current ADC signal (hopefully still different from x)
-			while(x != y){ // while that signal still differs (it is high)
-				y = ADC;
-				highPulse++; // count how many iterations it is high for
-				if(highPulse >= MAX_VAL){
-					return 0;
-				}
+	//static unsigned char currentPulse = 0;
+	if(x != ADC){ //if a change from the orriginal ADC signal is detected
+		y = ADC; //set y to the current ADC signal (hopefully still different from x)
+		while(x != y){ // while that signal still differs (it is high)
+			y = ADC;
+			highPulse++; // count how many iterations it is high for
+			if(highPulse >= MAX_VAL){
+				return 0;
 			}
-			pulses[currentPulse][0] = highPulse;
-			while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
-				lowPulse++; // count how many iteratinos it is low for
-				y = ADC;
-				if(lowPulse >= MAX_VAL){
-					return 0;
-				}
-				//PORTB = lowPulse & 0xFF;
-			}
-			pulses[currentPulse][1] = lowPulse;
-			currentPulse++;
-			//LCD_DisplayString(1, pulses[currentPulse]);
 		}
+		pulses[currentPulse][0] = highPulse;
+		while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
+			lowPulse++; // count how many iteratinos it is low for
+			y = ADC;
+			if(lowPulse >= MAX_VAL){
+				return 0;
+			}
+			//PORTB = lowPulse & 0xFF;
+		}
+		pulses[currentPulse][1] = lowPulse;
+		currentPulse++;
+		//LCD_DisplayString(1, pulses[currentPulse]);
+	}
+	if(currentPulse >= 100){
+		currentPulse = 0;
 	}
 }
 
@@ -164,10 +165,37 @@ void decodeTick(){
 		}
 	}*/
 	unsigned char i = 0;
-	for(i = 1; i < 33; i++){
+	/*for(i = 1; i < 17; i++){
 		LCD_Cursor(i);
 		LCD_WriteData(pulses[i][0] + ' ');
 	}
+	for(i = 17; i <33; i++){
+		LCD_Cursor(i);
+		LCD_WriteData(pulses[i][1] + ' ');
+	} */
+
+	unsigned long averageHigh = 0;
+	for(i = 0; i < currentPulse; i++){
+		averageHigh += pulses[i][0];
+	}
+	averageHigh = averageHigh / currentPulse;
+	//LCD_Cursor(1);
+	//LCD_WriteData(averageHigh + ' ');
+
+	if(averageHigh > 45 && averageHigh < 57){
+		LCD_DisplayString(1, "Power!");
+	}
+	else if(averageHigh > 77 && averageHigh < 84){
+		LCD_DisplayString(1, "Channel");
+	}
+
+	/*unsigned long averageLow = 0;
+	for(i = 0; i < currentPulse; i++){
+		averageLow += pulses[i][1];
+	}
+	averageLow = averageLow / currentPulse;
+	LCD_Cursor(17);
+	LCD_WriteData(averageLow + ' ');*/
 }
 
 int main(void){
@@ -184,11 +212,11 @@ int main(void){
 	TimerSet(GCD);
 	TimerOn();
 
-	LCD_DisplayString(1, strings[0]);
+	//LCD_DisplayString(1, strings[0]);
 	
 	unsigned short x = ADC;
 	unsigned short y = 0;
-	unsigned short count2 = 0;
+	unsigned char count2 = 0;
 	unsigned char nineAndTen = 0;
 	unsigned short high = 0;
 
@@ -218,7 +246,7 @@ int main(void){
 	while (1){
 		//joyStick_Tick();
 		decodeTick();
-		while(count2 < 50){
+		while(count2 < 100){ //100 readings to fill up array
 			while (!TimerFlag);
 			TimerFlag = 0;
 			count2 ++;
