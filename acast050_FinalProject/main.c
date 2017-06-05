@@ -188,6 +188,9 @@ void decodeTick(){
 	else if(averageHigh > 77 && averageHigh < 84){
 		LCD_DisplayString(1, "Channel");
 	}
+	else if(averageHigh > 91){
+		LCD_DisplayString(1, "Pointed Away");
+	}
 
 	/*unsigned long averageLow = 0;
 	for(i = 0; i < currentPulse; i++){
@@ -195,7 +198,7 @@ void decodeTick(){
 	}
 	averageLow = averageLow / currentPulse;
 	LCD_Cursor(17);
-	LCD_WriteData(averageLow + ' ');*/
+	LCD_WriteData(averageLow + ' '); */
 }
 
 int main(void){
