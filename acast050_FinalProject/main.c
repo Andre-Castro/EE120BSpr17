@@ -68,20 +68,20 @@ typedef struct _task {
 } task;
 
 task keypad;
-task tasks[1];
-const unsigned char taskNum = 1;
+task tasks[2];
+const unsigned char taskNum = 2;
 
-enum JS_STATES {init, up, down, maintainD, maintainU} JS_STATE;
+enum JS_STATES {JS_init, up, down, maintainD, maintainU} JS_STATE;
 void joyStick_Tick(){
 	static unsigned char pos = 0;
 	unsigned char J = ~PINA & 0x08;
 	switch(JS_STATE){ //transitions
-		case init:
+		case JS_init:
 			if(J > 0 && pos < ARR_SIZE - 1){
 				JS_STATE = down;
 			}
 			else{
-				JS_STATE = init;
+				JS_STATE = JS_init;
 			}
 			break;
 		case up:
@@ -91,7 +91,7 @@ void joyStick_Tick(){
 			break;
 		case maintainD:
 			if(J == 0){
-				JS_STATE = init;
+				JS_STATE = JS_init;
 			}
 			else{
 				JS_STATE = maintainD;
@@ -100,11 +100,11 @@ void joyStick_Tick(){
 		case maintainU:
 			break;
 		default:
-			JS_STATE = init;
+			JS_STATE = JS_init;
 			break;
 	}
 	switch(JS_STATE){ //actions
-		case init:
+		case JS_init:
 			break;
 		case up:
 			break;
@@ -122,27 +122,51 @@ void joyStick_Tick(){
 	}
 }
 
-void irLoop(){
+enum IR_STATES{IR_init, countHigh, countLow, update};
+void irLoop(unsigned short x, unsigned short y){
 	unsigned short highPulse = 0;
 	unsigned short lowPulse = 0;
 	static unsigned char currentPulse = 0;
-	if(PINA & 0x01){
-		while(PINA & 0x01){
-			highPulse++;
-			if(highPulse >= MAX_VAL){
-				return currentPulse;
+	unsigned char i = 0;
+	for(i = 0; i < 100; i ++){
+		if(x != ADC){ //if a change from the orriginal ADC signal is detected
+			y = ADC; //set y to the current ADC signal (hopefully still different from x)
+			while(x != y){ // while that signal still differs (it is high)
+				y = ADC;
+				highPulse++; // count how many iterations it is high for
+				if(highPulse >= MAX_VAL){
+					return 0;
+				}
 			}
-		}
-		pulses[currentPulse][0] = highPulse;
-		while(!(PINA & 0x01)){
-			lowPulse++;
-			if(lowPulse >= MAX_VAL){
-				return currentPulse;
+			pulses[currentPulse][0] = highPulse;
+			while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
+				lowPulse++; // count how many iteratinos it is low for
+				y = ADC;
+				if(lowPulse >= MAX_VAL){
+					return 0;
+				}
+				//PORTB = lowPulse & 0xFF;
 			}
+			pulses[currentPulse][1] = lowPulse;
+			currentPulse++;
+			//LCD_DisplayString(1, pulses[currentPulse]);
 		}
-		pulses[currentPulse][1] = lowPulse;
-		currentPulse++;
-		//LCD_DisplayString(1, pulses[currentPulse]);
+	}
+}
+
+void decodeTick(){
+	/*if(pulses[0][0] == 0){
+		return; // no signal has been sent yet
+	}
+	else{
+		if(pulses[0][0] > 100){
+			LCD_DisplayString(1, "Power");
+		}
+	}*/
+	unsigned char i = 0;
+	for(i = 1; i < 33; i++){
+		LCD_Cursor(i);
+		LCD_WriteData(pulses[i][0] + ' ');
 	}
 }
 
@@ -156,33 +180,71 @@ int main(void){
 	LCD_ClearScreen();
 	LCD_Cursor(1);
 		
-	unsigned long GCD = 200;
+	unsigned long GCD = 1;
 	TimerSet(GCD);
 	TimerOn();
 
 	LCD_DisplayString(1, strings[0]);
 	
 	unsigned short x = ADC;
-	unsigned char count2 = 0;
+	unsigned short y = 0;
+	unsigned short count2 = 0;
 	unsigned char nineAndTen = 0;
+	unsigned short high = 0;
+
+	/*unsigned char i = 0;
+	tasks[i].state = IR_init;
+	tasks[i].period = 1;
+	tasks[i].elapsedTime = tasks[i].period;
+	tasks[i].TickFct = &irLoop;
+	
+	i++;
+	tasks[i].state = JS_init;
+	tasks[i].period = 50;
+	tasks[i].elapsedTime = tasks[i].period;
+	tasks[i].TickFct = &joyStick_Tick;
+
+	while(1) {
+		for(i = 0; i < taskNum; i++){
+			if(tasks[i].elapsedTime >= tasks[i].period){
+				tasks[i].state = tasks[i].TickFct(tasks[i].state);
+				tasks[i].elapsedTime = 0;
+			}
+			tasks[i].elapsedTime += GCD;
+		}
+	}*/
+
 
 	while (1){
-		joyStick_Tick();
-		//while(count2 < 50){
+		//joyStick_Tick();
+		decodeTick();
+		while(count2 < 50){
 			while (!TimerFlag);
 			TimerFlag = 0;
 			count2 ++;
 
-			irLoop();
-			LCD_DisplayString(1, count2);
+			irLoop(x, y);
 
-			x = ADC;
-			PORTB = x & 0xFF;
-			nineAndTen = (char)(x>>8);
-			PORTC = SetBit(PORTC, 2, (nineAndTen & 0x01));
-			PORTC = SetBit(PORTC, 3, (nineAndTen & 0x02));
-		//}
-		//count2 = 0;
+			/*if(x != ADC){ //ADC has changed, signal has been deteced.
+				LCD_DisplayString(1, "Change detected");
+				y = ADC;
+				high ++;
+				while(x!=y){ // while signal is still different than the original
+					high++;
+					y = ADC;
+				}
+				LCD_DisplayString(1, "New Change Deteced");
+				x = ADC;
+			}
+			PORTB = high & 0xFF; */
+
+			//x = ADC;
+			//PORTB = x & 0xFF;
+			//nineAndTen = (char)(x>>8);
+			//PORTC = SetBit(PORTC, 2, (nineAndTen & 0x01));
+			//PORTC = SetBit(PORTC, 3, (nineAndTen & 0x02));
+		}
+		count2 = 0;
 	}
 	return 0;
 }

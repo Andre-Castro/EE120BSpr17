@@ -3,31 +3,31 @@ acast050_FinalProject.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000040  00800100  000003ce  00000462  2**0
+  0 .data         00000040  00800100  000003aa  0000043e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000003ce  00000000  00000000  00000094  2**1
+  1 .text         000003aa  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          000000d0  00800140  00800140  000004a2  2**0
+  2 .bss          000000f0  00800140  00800140  0000047e  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000004a2  2**0
+  3 .comment      00000030  00000000  00000000  0000047e  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004d4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004b0  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000a8  00000000  00000000  00000514  2**0
+  5 .debug_aranges 000000b0  00000000  00000000  000004f0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000e9a  00000000  00000000  000005bc  2**0
+  6 .debug_info   00000f59  00000000  00000000  000005a0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000995  00000000  00000000  00001456  2**0
+  7 .debug_abbrev 00000997  00000000  00000000  000014f9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000620  00000000  00000000  00001deb  2**0
+  8 .debug_line   0000065c  00000000  00000000  00001e90  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000168  00000000  00000000  0000240c  2**2
+  9 .debug_frame  000001a4  00000000  00000000  000024ec  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000005a4  00000000  00000000  00002574  2**0
+ 10 .debug_str    000005f8  00000000  00000000  00002690  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000467  00000000  00000000  00002b18  2**0
+ 11 .debug_loc    000004d3  00000000  00000000  00002c88  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000098  00000000  00000000  00002f7f  2**0
+ 12 .debug_ranges 000000a0  00000000  00000000  0000315b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -116,7 +116,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	ee ec       	ldi	r30, 0xCE	; 206
+  9e:	ea ea       	ldi	r30, 0xAA	; 170
   a0:	f3 e0       	ldi	r31, 0x03	; 3
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -137,22 +137,22 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	a0 31       	cpi	r26, 0x10	; 16
+  bc:	a0 33       	cpi	r26, 0x30	; 48
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
   c2:	41 d1       	rcall	.+642    	; 0x346 <main>
-  c4:	82 c1       	rjmp	.+772    	; 0x3ca <_exit>
+  c4:	70 c1       	rjmp	.+736    	; 0x3a6 <_exit>
 
 000000c6 <__bad_interrupt>:
   c6:	9c cf       	rjmp	.-200    	; 0x0 <__vectors>
 
 000000c8 <delay_ms>:
-void TimerOff() {
-	TCCR1B = 0x00;
-}
-
-void TimerISR() {
-	TimerFlag = 1;
+		case maintainD:
+			break;
+		case maintainU:
+			break;
+		default:
+			LCD_DisplayString(1, strings[0]);
   c8:	18 16       	cp	r1, r24
   ca:	19 06       	cpc	r1, r25
   cc:	5c f0       	brlt	.+22     	; 0xe4 <delay_ms+0x1c>
@@ -269,20 +269,16 @@ void TimerISR() {
  19c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__data_start+0x1>
  1a0:	a0 91 02 01 	lds	r26, 0x0102	; 0x800102 <__data_start+0x2>
  1a4:	b0 91 03 01 	lds	r27, 0x0103	; 0x800103 <__data_start+0x3>
- 1a8:	80 93 42 01 	sts	0x0142, r24	; 0x800142 <_avr_timer_cntcurr>
- 1ac:	90 93 43 01 	sts	0x0143, r25	; 0x800143 <_avr_timer_cntcurr+0x1>
- 1b0:	a0 93 44 01 	sts	0x0144, r26	; 0x800144 <_avr_timer_cntcurr+0x2>
- 1b4:	b0 93 45 01 	sts	0x0145, r27	; 0x800145 <_avr_timer_cntcurr+0x3>
+ 1a8:	80 93 41 01 	sts	0x0141, r24	; 0x800141 <_avr_timer_cntcurr>
+ 1ac:	90 93 42 01 	sts	0x0142, r25	; 0x800142 <_avr_timer_cntcurr+0x1>
+ 1b0:	a0 93 43 01 	sts	0x0143, r26	; 0x800143 <_avr_timer_cntcurr+0x2>
+ 1b4:	b0 93 44 01 	sts	0x0144, r27	; 0x800144 <_avr_timer_cntcurr+0x3>
  1b8:	8f b7       	in	r24, 0x3f	; 63
  1ba:	80 68       	ori	r24, 0x80	; 128
  1bc:	8f bf       	out	0x3f, r24	; 63
  1be:	08 95       	ret
 
 000001c0 <__vector_13>:
-}
-
-
-ISR(TIMER1_COMPA_vect) {
  1c0:	1f 92       	push	r1
  1c2:	0f 92       	push	r0
  1c4:	0f b6       	in	r0, 0x3f	; 63
@@ -292,47 +288,31 @@ ISR(TIMER1_COMPA_vect) {
  1cc:	9f 93       	push	r25
  1ce:	af 93       	push	r26
  1d0:	bf 93       	push	r27
-	_avr_timer_cntcurr--;
- 1d2:	80 91 42 01 	lds	r24, 0x0142	; 0x800142 <_avr_timer_cntcurr>
- 1d6:	90 91 43 01 	lds	r25, 0x0143	; 0x800143 <_avr_timer_cntcurr+0x1>
- 1da:	a0 91 44 01 	lds	r26, 0x0144	; 0x800144 <_avr_timer_cntcurr+0x2>
- 1de:	b0 91 45 01 	lds	r27, 0x0145	; 0x800145 <_avr_timer_cntcurr+0x3>
+ 1d2:	80 91 41 01 	lds	r24, 0x0141	; 0x800141 <_avr_timer_cntcurr>
+ 1d6:	90 91 42 01 	lds	r25, 0x0142	; 0x800142 <_avr_timer_cntcurr+0x1>
+ 1da:	a0 91 43 01 	lds	r26, 0x0143	; 0x800143 <_avr_timer_cntcurr+0x2>
+ 1de:	b0 91 44 01 	lds	r27, 0x0144	; 0x800144 <_avr_timer_cntcurr+0x3>
  1e2:	01 97       	sbiw	r24, 0x01	; 1
  1e4:	a1 09       	sbc	r26, r1
  1e6:	b1 09       	sbc	r27, r1
- 1e8:	80 93 42 01 	sts	0x0142, r24	; 0x800142 <_avr_timer_cntcurr>
- 1ec:	90 93 43 01 	sts	0x0143, r25	; 0x800143 <_avr_timer_cntcurr+0x1>
- 1f0:	a0 93 44 01 	sts	0x0144, r26	; 0x800144 <_avr_timer_cntcurr+0x2>
- 1f4:	b0 93 45 01 	sts	0x0145, r27	; 0x800145 <_avr_timer_cntcurr+0x3>
-	if (_avr_timer_cntcurr == 0) {
+ 1e8:	80 93 41 01 	sts	0x0141, r24	; 0x800141 <_avr_timer_cntcurr>
+ 1ec:	90 93 42 01 	sts	0x0142, r25	; 0x800142 <_avr_timer_cntcurr+0x1>
+ 1f0:	a0 93 43 01 	sts	0x0143, r26	; 0x800143 <_avr_timer_cntcurr+0x2>
+ 1f4:	b0 93 44 01 	sts	0x0144, r27	; 0x800144 <_avr_timer_cntcurr+0x3>
  1f8:	89 2b       	or	r24, r25
  1fa:	8a 2b       	or	r24, r26
  1fc:	8b 2b       	or	r24, r27
  1fe:	99 f4       	brne	.+38     	; 0x226 <__vector_13+0x66>
-void TimerOff() {
-	TCCR1B = 0x00;
-}
-
-void TimerISR() {
-	TimerFlag = 1;
  200:	81 e0       	ldi	r24, 0x01	; 1
- 202:	80 93 46 01 	sts	0x0146, r24	; 0x800146 <TimerFlag>
-
-ISR(TIMER1_COMPA_vect) {
-	_avr_timer_cntcurr--;
-	if (_avr_timer_cntcurr == 0) {
-		TimerISR();
-		_avr_timer_cntcurr = _avr_timer_M;
+ 202:	80 93 45 01 	sts	0x0145, r24	; 0x800145 <TimerFlag>
  206:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__data_start>
  20a:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__data_start+0x1>
  20e:	a0 91 02 01 	lds	r26, 0x0102	; 0x800102 <__data_start+0x2>
  212:	b0 91 03 01 	lds	r27, 0x0103	; 0x800103 <__data_start+0x3>
- 216:	80 93 42 01 	sts	0x0142, r24	; 0x800142 <_avr_timer_cntcurr>
- 21a:	90 93 43 01 	sts	0x0143, r25	; 0x800143 <_avr_timer_cntcurr+0x1>
- 21e:	a0 93 44 01 	sts	0x0144, r26	; 0x800144 <_avr_timer_cntcurr+0x2>
- 222:	b0 93 45 01 	sts	0x0145, r27	; 0x800145 <_avr_timer_cntcurr+0x3>
-	}
-}
+ 216:	80 93 41 01 	sts	0x0141, r24	; 0x800141 <_avr_timer_cntcurr>
+ 21a:	90 93 42 01 	sts	0x0142, r25	; 0x800142 <_avr_timer_cntcurr+0x1>
+ 21e:	a0 93 43 01 	sts	0x0143, r26	; 0x800143 <_avr_timer_cntcurr+0x2>
+ 222:	b0 93 44 01 	sts	0x0144, r27	; 0x800144 <_avr_timer_cntcurr+0x3>
  226:	bf 91       	pop	r27
  228:	af 91       	pop	r26
  22a:	9f 91       	pop	r25
@@ -344,25 +324,17 @@ ISR(TIMER1_COMPA_vect) {
  236:	18 95       	reti
 
 00000238 <TimerSet>:
-
-void TimerSet(unsigned long M) {
-	_avr_timer_M = M;
  238:	60 93 00 01 	sts	0x0100, r22	; 0x800100 <__data_start>
  23c:	70 93 01 01 	sts	0x0101, r23	; 0x800101 <__data_start+0x1>
  240:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <__data_start+0x2>
  244:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <__data_start+0x3>
-	_avr_timer_cntcurr = _avr_timer_M;
- 248:	60 93 42 01 	sts	0x0142, r22	; 0x800142 <_avr_timer_cntcurr>
- 24c:	70 93 43 01 	sts	0x0143, r23	; 0x800143 <_avr_timer_cntcurr+0x1>
- 250:	80 93 44 01 	sts	0x0144, r24	; 0x800144 <_avr_timer_cntcurr+0x2>
- 254:	90 93 45 01 	sts	0x0145, r25	; 0x800145 <_avr_timer_cntcurr+0x3>
+ 248:	60 93 41 01 	sts	0x0141, r22	; 0x800141 <_avr_timer_cntcurr>
+ 24c:	70 93 42 01 	sts	0x0142, r23	; 0x800142 <_avr_timer_cntcurr+0x1>
+ 250:	80 93 43 01 	sts	0x0143, r24	; 0x800143 <_avr_timer_cntcurr+0x2>
+ 254:	90 93 44 01 	sts	0x0144, r25	; 0x800144 <_avr_timer_cntcurr+0x3>
  258:	08 95       	ret
 
 0000025a <ADC_init>:
-}
-
-void ADC_init() {
-	ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
  25a:	ea e7       	ldi	r30, 0x7A	; 122
  25c:	f0 e0       	ldi	r31, 0x00	; 0
  25e:	80 81       	ld	r24, Z
@@ -370,205 +342,222 @@ void ADC_init() {
  262:	80 83       	st	Z, r24
  264:	08 95       	ret
 
-00000266 <joyStick_Tick>:
-}
-
-enum JS_STATES {init, up, down, maintainD, maintainU} JS_STATE;
-void joyStick_Tick(){
-	static unsigned char pos = 0;
-	unsigned char J = ~PINA & 0x08;
- 266:	80 b1       	in	r24, 0x00	; 0
- 268:	80 95       	com	r24
- 26a:	88 70       	andi	r24, 0x08	; 8
-	switch(JS_STATE){ //transitions
- 26c:	90 91 0f 02 	lds	r25, 0x020F	; 0x80020f <JS_STATE>
- 270:	92 30       	cpi	r25, 0x02	; 2
- 272:	b1 f0       	breq	.+44     	; 0x2a0 <joyStick_Tick+0x3a>
- 274:	28 f4       	brcc	.+10     	; 0x280 <joyStick_Tick+0x1a>
- 276:	99 23       	and	r25, r25
- 278:	41 f0       	breq	.+16     	; 0x28a <joyStick_Tick+0x24>
- 27a:	91 30       	cpi	r25, 0x01	; 1
- 27c:	e9 f0       	breq	.+58     	; 0x2b8 <joyStick_Tick+0x52>
- 27e:	19 c0       	rjmp	.+50     	; 0x2b2 <joyStick_Tick+0x4c>
- 280:	93 30       	cpi	r25, 0x03	; 3
- 282:	91 f0       	breq	.+36     	; 0x2a8 <joyStick_Tick+0x42>
- 284:	94 30       	cpi	r25, 0x04	; 4
- 286:	c1 f0       	breq	.+48     	; 0x2b8 <joyStick_Tick+0x52>
- 288:	14 c0       	rjmp	.+40     	; 0x2b2 <joyStick_Tick+0x4c>
-		case init:
-			if(J > 0 && pos < ARR_SIZE - 1){
- 28a:	88 23       	and	r24, r24
- 28c:	81 f1       	breq	.+96     	; 0x2ee <joyStick_Tick+0x88>
- 28e:	80 91 41 01 	lds	r24, 0x0141	; 0x800141 <pos.1891>
- 292:	90 e0       	ldi	r25, 0x00	; 0
- 294:	04 97       	sbiw	r24, 0x04	; 4
- 296:	5c f5       	brge	.+86     	; 0x2ee <joyStick_Tick+0x88>
-				JS_STATE = down;
- 298:	82 e0       	ldi	r24, 0x02	; 2
- 29a:	80 93 0f 02 	sts	0x020F, r24	; 0x80020f <JS_STATE>
- 29e:	12 c0       	rjmp	.+36     	; 0x2c4 <joyStick_Tick+0x5e>
-			}
+00000266 <irLoop>:
 			break;
-		case up:
-			break;
-		case down:
-			JS_STATE = maintainD;
- 2a0:	83 e0       	ldi	r24, 0x03	; 3
- 2a2:	80 93 0f 02 	sts	0x020F, r24	; 0x80020f <JS_STATE>
-			break;
- 2a6:	08 95       	ret
-		case maintainD:
-			if(J == 0){
- 2a8:	81 11       	cpse	r24, r1
- 2aa:	21 c0       	rjmp	.+66     	; 0x2ee <joyStick_Tick+0x88>
-				JS_STATE = init;
- 2ac:	10 92 0f 02 	sts	0x020F, r1	; 0x80020f <JS_STATE>
- 2b0:	08 95       	ret
-			}
-			break;
-		case maintainU:
-			break;
-		default:
-			JS_STATE = init;
- 2b2:	10 92 0f 02 	sts	0x020F, r1	; 0x80020f <JS_STATE>
-			break;
- 2b6:	08 95       	ret
-	}
-	switch(JS_STATE){ //actions
- 2b8:	92 30       	cpi	r25, 0x02	; 2
- 2ba:	21 f0       	breq	.+8      	; 0x2c4 <joyStick_Tick+0x5e>
- 2bc:	c0 f0       	brcs	.+48     	; 0x2ee <joyStick_Tick+0x88>
- 2be:	95 30       	cpi	r25, 0x05	; 5
- 2c0:	80 f4       	brcc	.+32     	; 0x2e2 <joyStick_Tick+0x7c>
- 2c2:	08 95       	ret
-		case init:
-			break;
-		case up:
-			break;
-		case down:
-			pos++;
- 2c4:	e0 91 41 01 	lds	r30, 0x0141	; 0x800141 <pos.1891>
- 2c8:	ef 5f       	subi	r30, 0xFF	; 255
- 2ca:	e0 93 41 01 	sts	0x0141, r30	; 0x800141 <pos.1891>
-			LCD_DisplayString(1, strings[pos]);
- 2ce:	f0 e0       	ldi	r31, 0x00	; 0
- 2d0:	ee 0f       	add	r30, r30
- 2d2:	ff 1f       	adc	r31, r31
- 2d4:	ec 5f       	subi	r30, 0xFC	; 252
- 2d6:	fe 4f       	sbci	r31, 0xFE	; 254
- 2d8:	60 81       	ld	r22, Z
- 2da:	71 81       	ldd	r23, Z+1	; 0x01
- 2dc:	81 e0       	ldi	r24, 0x01	; 1
- 2de:	33 cf       	rjmp	.-410    	; 0x146 <LCD_DisplayString>
-			break;
- 2e0:	08 95       	ret
-		case maintainD:
-			break;
-		case maintainU:
-			break;
-		default:
-			LCD_DisplayString(1, strings[0]);
- 2e2:	60 91 04 01 	lds	r22, 0x0104	; 0x800104 <strings>
- 2e6:	70 91 05 01 	lds	r23, 0x0105	; 0x800105 <strings+0x1>
- 2ea:	81 e0       	ldi	r24, 0x01	; 1
- 2ec:	2c cf       	rjmp	.-424    	; 0x146 <LCD_DisplayString>
- 2ee:	08 95       	ret
-
-000002f0 <irLoop>:
-
-void irLoop(){
-	unsigned short highPulse = 0;
-	unsigned short lowPulse = 0;
-	static unsigned char currentPulse = 0;
-	if(PINA & 0x01){
- 2f0:	00 99       	sbic	0x00, 0	; 0
- 2f2:	07 c0       	rjmp	.+14     	; 0x302 <irLoop+0x12>
- 2f4:	08 95       	ret
-		while(PINA & 0x01){
-			highPulse++;
- 2f6:	01 96       	adiw	r24, 0x01	; 1
-			if(highPulse >= MAX_VAL){
- 2f8:	88 3e       	cpi	r24, 0xE8	; 232
- 2fa:	2d ef       	ldi	r18, 0xFD	; 253
- 2fc:	92 07       	cpc	r25, r18
- 2fe:	19 f4       	brne	.+6      	; 0x306 <irLoop+0x16>
- 300:	08 95       	ret
- 302:	80 e0       	ldi	r24, 0x00	; 0
- 304:	90 e0       	ldi	r25, 0x00	; 0
-void irLoop(){
-	unsigned short highPulse = 0;
-	unsigned short lowPulse = 0;
-	static unsigned char currentPulse = 0;
-	if(PINA & 0x01){
-		while(PINA & 0x01){
- 306:	00 99       	sbic	0x00, 0	; 0
- 308:	f6 cf       	rjmp	.-20     	; 0x2f6 <irLoop+0x6>
-			highPulse++;
-			if(highPulse >= MAX_VAL){
-				return currentPulse;
-			}
-		}
-		pulses[currentPulse][0] = highPulse;
- 30a:	40 91 40 01 	lds	r20, 0x0140	; 0x800140 <__data_end>
- 30e:	24 2f       	mov	r18, r20
- 310:	30 e0       	ldi	r19, 0x00	; 0
- 312:	f9 01       	movw	r30, r18
- 314:	ee 0f       	add	r30, r30
- 316:	ff 1f       	adc	r31, r31
- 318:	e9 5b       	subi	r30, 0xB9	; 185
- 31a:	fe 4f       	sbci	r31, 0xFE	; 254
- 31c:	80 83       	st	Z, r24
 	}
 }
 
-void irLoop(){
+enum IR_STATES{IR_init, countHigh, countLow, update};
+void irLoop(unsigned short x, unsigned short y){
+ 266:	ef 92       	push	r14
+ 268:	ff 92       	push	r15
+ 26a:	1f 93       	push	r17
+ 26c:	cf 93       	push	r28
+ 26e:	df 93       	push	r29
+ 270:	a4 e6       	ldi	r26, 0x64	; 100
 	unsigned short highPulse = 0;
 	unsigned short lowPulse = 0;
- 31e:	80 e0       	ldi	r24, 0x00	; 0
- 320:	90 e0       	ldi	r25, 0x00	; 0
-			if(highPulse >= MAX_VAL){
-				return currentPulse;
+ 272:	60 e0       	ldi	r22, 0x00	; 0
+ 274:	70 e0       	ldi	r23, 0x00	; 0
+	}
+}
+
+enum IR_STATES{IR_init, countHigh, countLow, update};
+void irLoop(unsigned short x, unsigned short y){
+	unsigned short highPulse = 0;
+ 276:	20 e0       	ldi	r18, 0x00	; 0
+ 278:	30 e0       	ldi	r19, 0x00	; 0
+	unsigned short lowPulse = 0;
+	static unsigned char currentPulse = 0;
+	unsigned char i = 0;
+	for(i = 0; i < 100; i ++){
+		if(x != ADC){ //if a change from the orriginal ADC signal is detected
+ 27a:	e8 e7       	ldi	r30, 0x78	; 120
+ 27c:	f0 e0       	ldi	r31, 0x00	; 0
+ 27e:	40 81       	ld	r20, Z
+ 280:	51 81       	ldd	r21, Z+1	; 0x01
+ 282:	48 17       	cp	r20, r24
+ 284:	59 07       	cpc	r21, r25
+ 286:	71 f1       	breq	.+92     	; 0x2e4 <irLoop+0x7e>
+			y = ADC; //set y to the current ADC signal (hopefully still different from x)
+ 288:	40 81       	ld	r20, Z
+ 28a:	51 81       	ldd	r21, Z+1	; 0x01
+			while(x != y){ // while that signal still differs (it is high)
+ 28c:	84 17       	cp	r24, r20
+ 28e:	95 07       	cpc	r25, r21
+ 290:	61 f1       	breq	.+88     	; 0x2ea <irLoop+0x84>
+				y = ADC;
+ 292:	40 81       	ld	r20, Z
+ 294:	51 81       	ldd	r21, Z+1	; 0x01
+				highPulse++; // count how many iterations it is high for
+ 296:	2f 5f       	subi	r18, 0xFF	; 255
+ 298:	3f 4f       	sbci	r19, 0xFF	; 255
+				if(highPulse >= MAX_VAL){
+ 29a:	28 3e       	cpi	r18, 0xE8	; 232
+ 29c:	1d ef       	ldi	r17, 0xFD	; 253
+ 29e:	31 07       	cpc	r19, r17
+ 2a0:	b8 f5       	brcc	.+110    	; 0x310 <irLoop+0xaa>
+ 2a2:	08 c0       	rjmp	.+16     	; 0x2b4 <irLoop+0x4e>
+	unsigned char i = 0;
+	for(i = 0; i < 100; i ++){
+		if(x != ADC){ //if a change from the orriginal ADC signal is detected
+			y = ADC; //set y to the current ADC signal (hopefully still different from x)
+			while(x != y){ // while that signal still differs (it is high)
+				y = ADC;
+ 2a4:	40 81       	ld	r20, Z
+ 2a6:	51 81       	ldd	r21, Z+1	; 0x01
+				highPulse++; // count how many iterations it is high for
+ 2a8:	2f 5f       	subi	r18, 0xFF	; 255
+ 2aa:	3f 4f       	sbci	r19, 0xFF	; 255
+				if(highPulse >= MAX_VAL){
+ 2ac:	28 3e       	cpi	r18, 0xE8	; 232
+ 2ae:	bd ef       	ldi	r27, 0xFD	; 253
+ 2b0:	3b 07       	cpc	r19, r27
+ 2b2:	71 f1       	breq	.+92     	; 0x310 <irLoop+0xaa>
+	static unsigned char currentPulse = 0;
+	unsigned char i = 0;
+	for(i = 0; i < 100; i ++){
+		if(x != ADC){ //if a change from the orriginal ADC signal is detected
+			y = ADC; //set y to the current ADC signal (hopefully still different from x)
+			while(x != y){ // while that signal still differs (it is high)
+ 2b4:	84 17       	cp	r24, r20
+ 2b6:	95 07       	cpc	r25, r21
+ 2b8:	a9 f7       	brne	.-22     	; 0x2a4 <irLoop+0x3e>
+ 2ba:	17 c0       	rjmp	.+46     	; 0x2ea <irLoop+0x84>
+					return 0;
+				}
 			}
-		}
-		pulses[currentPulse][0] = highPulse;
-		while(!(PINA & 0x01)){
- 322:	05 c0       	rjmp	.+10     	; 0x32e <irLoop+0x3e>
-			lowPulse++;
- 324:	01 96       	adiw	r24, 0x01	; 1
-			if(lowPulse >= MAX_VAL){
- 326:	88 3e       	cpi	r24, 0xE8	; 232
- 328:	5d ef       	ldi	r21, 0xFD	; 253
- 32a:	95 07       	cpc	r25, r21
- 32c:	59 f0       	breq	.+22     	; 0x344 <irLoop+0x54>
-			if(highPulse >= MAX_VAL){
-				return currentPulse;
+			pulses[currentPulse][0] = highPulse;
+			while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
+				lowPulse++; // count how many iteratinos it is low for
+ 2bc:	6f 5f       	subi	r22, 0xFF	; 255
+ 2be:	7f 4f       	sbci	r23, 0xFF	; 255
+				y = ADC;
+ 2c0:	40 81       	ld	r20, Z
+ 2c2:	51 81       	ldd	r21, Z+1	; 0x01
+				if(lowPulse >= MAX_VAL){
+ 2c4:	68 3e       	cpi	r22, 0xE8	; 232
+ 2c6:	cd ef       	ldi	r28, 0xFD	; 253
+ 2c8:	7c 07       	cpc	r23, r28
+ 2ca:	11 f1       	breq	.+68     	; 0x310 <irLoop+0xaa>
+				if(highPulse >= MAX_VAL){
+					return 0;
+				}
 			}
-		}
-		pulses[currentPulse][0] = highPulse;
-		while(!(PINA & 0x01)){
- 32e:	00 9b       	sbis	0x00, 0	; 0
- 330:	f9 cf       	rjmp	.-14     	; 0x324 <irLoop+0x34>
-			lowPulse++;
-			if(lowPulse >= MAX_VAL){
-				return currentPulse;
+			pulses[currentPulse][0] = highPulse;
+			while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
+ 2cc:	84 17       	cp	r24, r20
+ 2ce:	95 07       	cpc	r25, r21
+ 2d0:	a9 f3       	breq	.-22     	; 0x2bc <irLoop+0x56>
+				if(lowPulse >= MAX_VAL){
+					return 0;
+				}
+				//PORTB = lowPulse & 0xFF;
 			}
+			pulses[currentPulse][1] = lowPulse;
+ 2d2:	e7 01       	movw	r28, r14
+ 2d4:	cc 0f       	add	r28, r28
+ 2d6:	dd 1f       	adc	r29, r29
+ 2d8:	c4 5a       	subi	r28, 0xA4	; 164
+ 2da:	de 4f       	sbci	r29, 0xFE	; 254
+ 2dc:	69 83       	std	Y+1, r22	; 0x01
+			currentPulse++;
+ 2de:	bf 5f       	subi	r27, 0xFF	; 255
+ 2e0:	b0 93 40 01 	sts	0x0140, r27	; 0x800140 <__data_end>
+ 2e4:	a1 50       	subi	r26, 0x01	; 1
+void irLoop(unsigned short x, unsigned short y){
+	unsigned short highPulse = 0;
+	unsigned short lowPulse = 0;
+	static unsigned char currentPulse = 0;
+	unsigned char i = 0;
+	for(i = 0; i < 100; i ++){
+ 2e6:	59 f6       	brne	.-106    	; 0x27e <irLoop+0x18>
+ 2e8:	13 c0       	rjmp	.+38     	; 0x310 <irLoop+0xaa>
+				highPulse++; // count how many iterations it is high for
+				if(highPulse >= MAX_VAL){
+					return 0;
+				}
+			}
+			pulses[currentPulse][0] = highPulse;
+ 2ea:	b0 91 40 01 	lds	r27, 0x0140	; 0x800140 <__data_end>
+ 2ee:	eb 2e       	mov	r14, r27
+ 2f0:	f1 2c       	mov	r15, r1
+ 2f2:	a7 01       	movw	r20, r14
+ 2f4:	44 0f       	add	r20, r20
+ 2f6:	55 1f       	adc	r21, r21
+ 2f8:	44 5a       	subi	r20, 0xA4	; 164
+ 2fa:	5e 4f       	sbci	r21, 0xFE	; 254
+ 2fc:	ea 01       	movw	r28, r20
+ 2fe:	28 83       	st	Y, r18
+			while(x == y){ // the signal has gone back to being low (or how it was orriginally before button press)
+				lowPulse++; // count how many iteratinos it is low for
+ 300:	6f 5f       	subi	r22, 0xFF	; 255
+ 302:	7f 4f       	sbci	r23, 0xFF	; 255
+				y = ADC;
+ 304:	40 81       	ld	r20, Z
+ 306:	51 81       	ldd	r21, Z+1	; 0x01
+				if(lowPulse >= MAX_VAL){
+ 308:	68 3e       	cpi	r22, 0xE8	; 232
+ 30a:	dd ef       	ldi	r29, 0xFD	; 253
+ 30c:	7d 07       	cpc	r23, r29
+ 30e:	f0 f2       	brcs	.-68     	; 0x2cc <irLoop+0x66>
+			pulses[currentPulse][1] = lowPulse;
+			currentPulse++;
+			//LCD_DisplayString(1, pulses[currentPulse]);
 		}
-		pulses[currentPulse][1] = lowPulse;
- 332:	22 0f       	add	r18, r18
- 334:	33 1f       	adc	r19, r19
- 336:	f9 01       	movw	r30, r18
- 338:	e9 5b       	subi	r30, 0xB9	; 185
- 33a:	fe 4f       	sbci	r31, 0xFE	; 254
- 33c:	81 83       	std	Z+1, r24	; 0x01
-		currentPulse++;
- 33e:	4f 5f       	subi	r20, 0xFF	; 255
- 340:	40 93 40 01 	sts	0x0140, r20	; 0x800140 <__data_end>
+	}
+}
+ 310:	df 91       	pop	r29
+ 312:	cf 91       	pop	r28
+ 314:	1f 91       	pop	r17
+ 316:	ff 90       	pop	r15
+ 318:	ef 90       	pop	r14
+ 31a:	08 95       	ret
+
+0000031c <decodeTick>:
+
+void decodeTick(){
+ 31c:	0f 93       	push	r16
+ 31e:	1f 93       	push	r17
+ 320:	cf 93       	push	r28
+ 322:	0e e5       	ldi	r16, 0x5E	; 94
+ 324:	11 e0       	ldi	r17, 0x01	; 1
+		if(pulses[0][0] > 100){
+			LCD_DisplayString(1, "Power");
+		}
+	}*/
+	unsigned char i = 0;
+	for(i = 1; i < 33; i++){
+ 326:	c1 e0       	ldi	r28, 0x01	; 1
+		LCD_Cursor(i);
+ 328:	8c 2f       	mov	r24, r28
+ 32a:	ed de       	rcall	.-550    	; 0x106 <LCD_Cursor>
+		LCD_WriteData(pulses[i][0] + ' ');
+ 32c:	f8 01       	movw	r30, r16
+ 32e:	80 81       	ld	r24, Z
+ 330:	80 5e       	subi	r24, 0xE0	; 224
+ 332:	00 df       	rcall	.-512    	; 0x134 <LCD_WriteData>
+		if(pulses[0][0] > 100){
+			LCD_DisplayString(1, "Power");
+		}
+	}*/
+	unsigned char i = 0;
+	for(i = 1; i < 33; i++){
+ 334:	cf 5f       	subi	r28, 0xFF	; 255
+ 336:	0e 5f       	subi	r16, 0xFE	; 254
+ 338:	1f 4f       	sbci	r17, 0xFF	; 255
+ 33a:	c1 32       	cpi	r28, 0x21	; 33
+ 33c:	a9 f7       	brne	.-22     	; 0x328 <decodeTick+0xc>
+		LCD_Cursor(i);
+		LCD_WriteData(pulses[i][0] + ' ');
+	}
+}
+ 33e:	cf 91       	pop	r28
+ 340:	1f 91       	pop	r17
+ 342:	0f 91       	pop	r16
  344:	08 95       	ret
 
 00000346 <main>:
-		//LCD_DisplayString(1, pulses[currentPulse]);
-	}
-}
 
 int main(void){
 	DDRA = 0x00; PORTA = 0xFF; //Input
@@ -592,7 +581,7 @@ int main(void){
  360:	cf de       	rcall	.-610    	; 0x100 <LCD_ClearScreen>
  362:	81 e0       	ldi	r24, 0x01	; 1
  364:	d0 de       	rcall	.-608    	; 0x106 <LCD_Cursor>
- 366:	68 ec       	ldi	r22, 0xC8	; 200
+ 366:	61 e0       	ldi	r22, 0x01	; 1
  368:	70 e0       	ldi	r23, 0x00	; 0
  36a:	80 e0       	ldi	r24, 0x00	; 0
  36c:	90 e0       	ldi	r25, 0x00	; 0
@@ -602,43 +591,25 @@ int main(void){
  376:	70 91 05 01 	lds	r23, 0x0105	; 0x800105 <strings+0x1>
  37a:	81 e0       	ldi	r24, 0x01	; 1
  37c:	e4 de       	rcall	.-568    	; 0x146 <LCD_DisplayString>
- 37e:	80 91 78 00 	lds	r24, 0x0078	; 0x800078 <__TEXT_REGION_LENGTH__+0x7e0078>
- 382:	90 91 79 00 	lds	r25, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7e0079>
- 386:	10 e0       	ldi	r17, 0x00	; 0
- 388:	c8 e7       	ldi	r28, 0x78	; 120
+ 37e:	00 91 78 00 	lds	r16, 0x0078	; 0x800078 <__TEXT_REGION_LENGTH__+0x7e0078>
+ 382:	10 91 79 00 	lds	r17, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7e0079>
+ 386:	ca df       	rcall	.-108    	; 0x31c <decodeTick>
+ 388:	c2 e3       	ldi	r28, 0x32	; 50
  38a:	d0 e0       	ldi	r29, 0x00	; 0
- 38c:	6c df       	rcall	.-296    	; 0x266 <joyStick_Tick>
- 38e:	80 91 46 01 	lds	r24, 0x0146	; 0x800146 <TimerFlag>
- 392:	88 23       	and	r24, r24
- 394:	e1 f3       	breq	.-8      	; 0x38e <main+0x48>
- 396:	10 92 46 01 	sts	0x0146, r1	; 0x800146 <TimerFlag>
- 39a:	1f 5f       	subi	r17, 0xFF	; 255
- 39c:	a9 df       	rcall	.-174    	; 0x2f0 <irLoop>
- 39e:	61 2f       	mov	r22, r17
- 3a0:	70 e0       	ldi	r23, 0x00	; 0
- 3a2:	81 e0       	ldi	r24, 0x01	; 1
- 3a4:	d0 de       	rcall	.-608    	; 0x146 <LCD_DisplayString>
- 3a6:	88 81       	ld	r24, Y
- 3a8:	99 81       	ldd	r25, Y+1	; 0x01
- 3aa:	85 b9       	out	0x05, r24	; 5
- 3ac:	28 b1       	in	r18, 0x08	; 8
- 3ae:	90 ff       	sbrs	r25, 0
- 3b0:	02 c0       	rjmp	.+4      	; 0x3b6 <main+0x70>
- 3b2:	24 60       	ori	r18, 0x04	; 4
- 3b4:	01 c0       	rjmp	.+2      	; 0x3b8 <main+0x72>
- 3b6:	2b 7f       	andi	r18, 0xFB	; 251
- 3b8:	28 b9       	out	0x08, r18	; 8
- 3ba:	88 b1       	in	r24, 0x08	; 8
- 3bc:	91 ff       	sbrs	r25, 1
- 3be:	02 c0       	rjmp	.+4      	; 0x3c4 <main+0x7e>
- 3c0:	88 60       	ori	r24, 0x08	; 8
- 3c2:	01 c0       	rjmp	.+2      	; 0x3c6 <main+0x80>
- 3c4:	87 7f       	andi	r24, 0xF7	; 247
- 3c6:	88 b9       	out	0x08, r24	; 8
- 3c8:	e1 cf       	rjmp	.-62     	; 0x38c <main+0x46>
+ 38c:	80 91 45 01 	lds	r24, 0x0145	; 0x800145 <TimerFlag>
+ 390:	88 23       	and	r24, r24
+ 392:	e1 f3       	breq	.-8      	; 0x38c <main+0x46>
+ 394:	10 92 45 01 	sts	0x0145, r1	; 0x800145 <TimerFlag>
+ 398:	60 e0       	ldi	r22, 0x00	; 0
+ 39a:	70 e0       	ldi	r23, 0x00	; 0
+ 39c:	c8 01       	movw	r24, r16
+ 39e:	63 df       	rcall	.-314    	; 0x266 <irLoop>
+ 3a0:	21 97       	sbiw	r28, 0x01	; 1
+ 3a2:	a1 f7       	brne	.-24     	; 0x38c <main+0x46>
+ 3a4:	f0 cf       	rjmp	.-32     	; 0x386 <main+0x40>
 
-000003ca <_exit>:
- 3ca:	f8 94       	cli
+000003a6 <_exit>:
+ 3a6:	f8 94       	cli
 
-000003cc <__stop_program>:
- 3cc:	ff cf       	rjmp	.-2      	; 0x3cc <__stop_program>
+000003a8 <__stop_program>:
+ 3a8:	ff cf       	rjmp	.-2      	; 0x3a8 <__stop_program>
