@@ -404,6 +404,16 @@ void decodeTick(){
 			if(temp){
 				PORTC = PORTC & 0x7F;
 				on = 0;
+				LCD_clear();
+				LCD_Update();
+				LCD_DisplayString(1, "Goodbye");
+				LCD_Cursor(17);
+				LCD_WriteData(0x0);
+				LCD_ClearScreen();
+			}
+			else{
+				PORTC = PORTC | 0x80;
+				on = 1;
 				if(currChannel == 0){
 					ReplaceBitmap(RobotHead);
 					LCD_Update();
@@ -416,10 +426,6 @@ void decodeTick(){
 					
 				}
 			}
-			else{
-				PORTC = PORTC | 0x80;
-				on = 1;
-			}
 		}
 		powerBool++;
 	}
@@ -427,11 +433,41 @@ void decodeTick(){
 		LCD_DisplayString(1, "Pointed Towards \"Channel UP\"");
 		happyBool = 0;
 		powerBool = 0;
+		if(currChannel < 2){
+			currChannel++;
+		}
+		
+		if(currChannel == 0){
+			ReplaceBitmap(RobotHead);
+			LCD_Update();
+		}
+		else if(currChannel == 1){
+			ReplaceBitmap(WB);
+			LCD_Update();
+		}
+		else{
+			
+		}
 	}
 	else if(averageHigh > 91 && averageHigh < 130 && on){
 		LCD_DisplayString(1, "Pointed Away    \"Channel DOWN\"");
 		happyBool = 0;
 		powerBool = 0;
+		if(currChannel > 0){
+			currChannel --;
+		}
+		
+		if(currChannel == 0){
+			ReplaceBitmap(RobotHead);
+			LCD_Update();
+		}
+		else if(currChannel == 1){
+			ReplaceBitmap(WB);
+			LCD_Update();
+		}
+		else{
+			
+		}
 	}
 
 	/*unsigned long averageLow = 0;
