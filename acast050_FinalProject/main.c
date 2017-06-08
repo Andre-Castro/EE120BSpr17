@@ -39,6 +39,7 @@ const unsigned short MAX_VAL = 65000;
 unsigned char currentPulse = 0;
 
 unsigned char on = 0;
+unsigned char currChannel = 0;
 
 const unsigned char ARR_SIZE = 5;
 const char *strings[5] = {"Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5"};
@@ -249,6 +250,23 @@ const unsigned char taskNum = 2;
 
 enum JS_STATES {JS_init, up, down, maintainD, maintainU} JS_STATE;
 void joyStick_Tick(){
+	unsigned char tempval = ~PINB & 0x03;
+	if(tempval == 1){
+		//LCD_DisplayString(1, "Updating..");
+		unsigned short i = 0;
+		for(i = 0; i< 489; i++){
+			LCDBuffer[i] = LCDBuffer[i] + 1;
+		}
+		LCD_Update();
+	}
+	else if(tempval == 2){
+		//LCD_DisplayString(1, "Updating..");
+		unsigned short i = 0;
+		for(i = 0; i< 489; i++){
+			LCDBuffer[i] = LCDBuffer[i] - 1;
+		}
+		LCD_Update();
+	}
 	/*ADMUX |= (1 << REFS0);
 	ADCSRA |= (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
 	short ud = readadc(0);
@@ -366,7 +384,6 @@ void irLoop(unsigned short x, unsigned short y){
 
 void decodeTick(){
 	static unsigned char powerBool = 0;
-	static unsigned char currChannel = 0;
 	/*if(pulses[0][0] == 0){
 		return; // no signal has been sent yet
 	}
