@@ -394,7 +394,7 @@ void decodeTick(){
 	//LCD_Cursor(1);
 	//LCD_WriteData(averageHigh + ' ');
 
-	if(averageHigh > 45 && averageHigh < 57 && !(~PINA & 0x08)){
+	if(averageHigh > 45 && averageHigh < 57 ){
 		LCD_DisplayString(1, "Power!");
 		LCD_Cursor(17);
 		LCD_WriteData(0x0);
@@ -409,7 +409,10 @@ void decodeTick(){
 				LCD_DisplayString(1, "Goodbye");
 				LCD_Cursor(17);
 				LCD_WriteData(0x0);
+				_delay_ms(10000);
 				LCD_ClearScreen();
+				powerBool = 0;
+				return;
 			}
 			else{
 				PORTC = PORTC | 0x80;
@@ -417,21 +420,26 @@ void decodeTick(){
 				if(currChannel == 0){
 					ReplaceBitmap(RobotHead);
 					LCD_Update();
+					_delay_ms(2500);
 				}
 				else if(currChannel == 1){
 					ReplaceBitmap(WB);
 					LCD_Update();
+					_delay_ms(2500);
 				}
 				else{
-					
+					LCD_clear();
+					DrawRectangle(5,5,79,40,Black, NotFilled);
+					LCD_Update();
+					_delay_ms(2500);
 				}
 			}
+			powerBool = 1;
 		}
-		powerBool++;
 	}
 	else if(averageHigh > 77 && averageHigh < 84 && on){
 		LCD_DisplayString(1, "Pointed Towards \"Channel UP\"");
-		happyBool = 0;
+		//happyBool = 0;
 		powerBool = 0;
 		if(currChannel < 2){
 			currChannel++;
@@ -440,18 +448,23 @@ void decodeTick(){
 		if(currChannel == 0){
 			ReplaceBitmap(RobotHead);
 			LCD_Update();
+			_delay_ms(2500);
 		}
 		else if(currChannel == 1){
 			ReplaceBitmap(WB);
 			LCD_Update();
+			_delay_ms(2500);
 		}
 		else{
-			
+			LCD_clear();
+			DrawRectangle(5,5,79,40,Black, NotFilled);
+			LCD_Update();
+			_delay_ms(2500);
 		}
 	}
 	else if(averageHigh > 91 && averageHigh < 130 && on){
 		LCD_DisplayString(1, "Pointed Away    \"Channel DOWN\"");
-		happyBool = 0;
+		//happyBool = 0;
 		powerBool = 0;
 		if(currChannel > 0){
 			currChannel --;
@@ -460,13 +473,18 @@ void decodeTick(){
 		if(currChannel == 0){
 			ReplaceBitmap(RobotHead);
 			LCD_Update();
+			_delay_ms(2500);
 		}
 		else if(currChannel == 1){
 			ReplaceBitmap(WB);
 			LCD_Update();
+			_delay_ms(2500);
 		}
 		else{
-			
+			LCD_clear();
+			DrawRectangle(5,5,79,40,Black, NotFilled);
+			LCD_Update();
+			_delay_ms(2500);
 		}
 	}
 
