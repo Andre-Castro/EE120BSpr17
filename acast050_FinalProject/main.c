@@ -38,7 +38,7 @@ unsigned char pulses[100][2];
 const unsigned short MAX_VAL = 65000;
 unsigned char currentPulse = 0;
 
-unsigned char happyBool = 0;
+unsigned char on = 0;
 
 const unsigned char ARR_SIZE = 5;
 const char *strings[5] = {"Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5"};
@@ -252,7 +252,7 @@ void joyStick_Tick(){
 	/*ADMUX |= (1 << REFS0);
 	ADCSRA |= (1 << ADEN) | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
 	short ud = readadc(0);
-	PORTB = ud & 0xFF;*/
+	PORTB = ud & 0xFF;
 	static unsigned char pos = 17;
 	unsigned char dOWN = ~PINA & 0x10;
 	if(dOWN){
@@ -261,7 +261,7 @@ void joyStick_Tick(){
 		LCD_WriteData(' ');
 		LCD_Cursor(pos - 16);
 		LCD_WriteData(0x0);
-	}
+	}*/
 }
 
 void joyStick_Tick2(){
@@ -366,7 +366,6 @@ void irLoop(unsigned short x, unsigned short y){
 
 void decodeTick(){
 	static unsigned char powerBool = 0;
-	static unsigned char on = 0;
 	static unsigned char currChannel = 0;
 	/*if(pulses[0][0] == 0){
 		return; // no signal has been sent yet
@@ -398,7 +397,6 @@ void decodeTick(){
 		LCD_DisplayString(1, "Power!");
 		LCD_Cursor(17);
 		LCD_WriteData(0x0);
-		happyBool = 1;
 		if(powerBool == 0){
 			unsigned char temp = PORTC & 0x80;
 			if(temp){
@@ -439,7 +437,6 @@ void decodeTick(){
 	}
 	else if(averageHigh > 77 && averageHigh < 84 && on){
 		LCD_DisplayString(1, "Pointed Towards \"Channel UP\"");
-		//happyBool = 0;
 		powerBool = 0;
 		if(currChannel < 2){
 			currChannel++;
@@ -464,7 +461,6 @@ void decodeTick(){
 	}
 	else if(averageHigh > 91 && averageHigh < 130 && on){
 		LCD_DisplayString(1, "Pointed Away    \"Channel DOWN\"");
-		//happyBool = 0;
 		powerBool = 0;
 		if(currChannel > 0){
 			currChannel --;
@@ -499,7 +495,7 @@ void decodeTick(){
 
 int main(void){
 	DDRA = 0x00; PORTA = 0xFF; //Input
-	DDRB = 0xFF; PORTB = 0x00; //Ouptut
+	DDRB = 0x00; PORTB = 0xFF; //Ouptut
 	DDRC = 0xFF; PORTC = 0x00; 
 	DDRD = 0xFF; PORTD = 0x00;
 	ADC_init('0');
@@ -552,7 +548,7 @@ int main(void){
 		//ReplaceBitmap(RobotHead);
 		//LCD_Update();
 		
-		if(happyBool){
+		if(on){
 			//ADC_init(1);
 			joyStick_Tick();
 		}
